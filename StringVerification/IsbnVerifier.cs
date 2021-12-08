@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace StringVerification
 {
@@ -12,7 +13,55 @@ namespace StringVerification
         /// <exception cref="ArgumentException">Thrown if number is null or empty or whitespace.</exception>
         public static bool IsValid(string number)
         {
-            throw new NotImplementedException("You need to implement this method.");
+            if (string.IsNullOrWhiteSpace(number))
+            {
+                throw new ArgumentException("Source string cannot be null or empty or whitespace.");
+            }
+
+            Regex[] regexArray = new Regex[8]
+            {
+                new Regex(@"^\d{9}\w{1}$"),
+                new Regex(@"^\d{9}-\w{1}$"),
+                new Regex(@"^\d{1}-\d{8}\w{1}$"),
+                new Regex(@"^\d{4}-\d{5}\w{1}$"),
+                new Regex(@"^\d{1}-\d{8}-\w{1}$"),
+                new Regex(@"^\d{4}-\d{5}-\w{1}$"),
+                new Regex(@"^\d{1}-\d{3}-\d{5}\w{1}$"),
+                new Regex(@"^\d{1}-\d{3}-\d{5}-\w{1}$"),
+            };
+
+            bool isMatch = false;
+
+            for (int i = 0; i < regexArray.Length; i++)
+            {
+                if (regexArray[i].IsMatch(number))
+                {
+                  isMatch = true;
+                  break;
+                }
+            }
+
+            if (!isMatch)
+            {
+                return false;
+            }
+
+            int sum = 0;
+            number = number.Replace("-", string.Empty, StringComparison.InvariantCulture);
+
+            for (int i = 0, j = number.Length; i < number.Length; i++, j--)
+            {
+                if (number[i] == 'X')
+                {
+                    sum += 10;
+                }
+                else if (char.IsDigit(number[i]))
+                {
+                    sum += (number[i] - '0') * j;
+                }
+            }
+
+            return sum % 11 == 0;
         }
     }
 }
