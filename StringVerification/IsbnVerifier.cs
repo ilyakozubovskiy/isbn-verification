@@ -29,7 +29,7 @@ namespace StringVerification
                 new Regex(@"^\d{1}-\d{3}-\d{5}\w{1}$"),
                 new Regex(@"^\d{1}-\d{3}-\d{5}-\w{1}$"),
             };
-
+            
             bool isMatch = false;
 
             for (int i = 0; i < regexArray.Length; i++)
@@ -51,13 +51,13 @@ namespace StringVerification
 
             for (int i = 0, j = number.Length; i < number.Length; i++, j--)
             {
-                if (number[i] == 'X')
-                {
-                    sum += 10;
-                }
-                else if (char.IsDigit(number[i]))
+                if (char.IsDigit(number[i]))
                 {
                     sum += (number[i] - '0') * j;
+                }
+                else if (number[i] == 'X')
+                {
+                    sum += 10;
                 }
             }
 
